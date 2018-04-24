@@ -8,7 +8,14 @@ use \Bitrix\Main\IO\File;
 class AddCatalogs
 {
 
- private $filePath = $_SERVER["DOCUMENT_ROOT"]."/create-dir/set_catalogs.txt";
+    //private $filePath = $_SERVER["DOCUMENT_ROOT"]."/create-dir/set_catalogs.txt";
+
+
+//    public function __construct()
+//    {
+//        $this->addDir();
+//    }
+
 
 
     function rus2translit($string)
@@ -41,19 +48,19 @@ class AddCatalogs
         return strtr($string, $converter);
     }
 
-//echo rus2translit("доставка");
 
-    function addDir($nameFolder)
+
+    private function addDir($nameFolder)
     {
         $nameFolder = trim($nameFolder);
         $nameFolder = rus2translit($nameFolder);
         $content = '<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
-    $APPLICATION->SetTitle("TESTOVA");?>
-    delivery1
-    <?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>';
+            $APPLICATION->SetTitle("TESTOVA");?>
+            delivery1
+            <?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>';
         $content2 = '<? $sSectionName = "' . $nameFolder . '";
-    $arDirProperties = Array();
-    ?>';
+            $arDirProperties = Array();
+            ?>';
 
         File::putFileContents(
             $_SERVER["DOCUMENT_ROOT"] . "/create-dir/$nameFolder/index.php", $content);
@@ -62,38 +69,34 @@ class AddCatalogs
 
     }
 
-$fp = fopen($filePath, "r");
-if ($fp)
-{
-while (($buffer = fgets($fp, 4096)) !== false)
-{
-$catalog = explode(" ", $buffer);
-foreach ($catalog as $id => $item)
-{
-addDir($catalog[$id]);
-pre($catalog[$id]);
-}
+    public function openFile()
+    {
+        $fp = fopen("$_SERVER["DOCUMENT_ROOT"].'/create-dir/set_catalogs.txt'", "r");
+        if ($fp)
+        {
+            while (($buffer = fgets($fp, 4096)) !== false)
+            {
+                $catalog = explode(" ", $buffer);
+                foreach ($catalog as $id => $item)
+                {
+                    $this->addDir($catalog[$id]);
+                    //pre($catalog[$id]);
+                }
 
-}
-if (!feof($fp)) {
-    echo "Ошибка: fgets() неожиданно потерпел неудачу\n";
-}
-fclose($handle);
+            }
+            if (!feof($fp))
+            {
+                echo "Ошибка: fgets() неожиданно потерпел неудачу\n";
+            }
 
-//RewriteFile($_SERVER["DOCUMENT_ROOT"]."/create-dir/a/index.php", $content);
-//RewriteFile($_SERVER["DOCUMENT_ROOT"]."/create-dir/a/.section.php", $content2);
+           fclose($fp);
+        }
 
-//File::putFileContents(
-//    $_SERVER["DOCUMENT_ROOT"]."/create-dir/div/index.php", $content);
-//File::putFileContents(
-//    $_SERVER["DOCUMENT_ROOT"]."/create-dir/div/.section.php", $content2);
-// $_SERVER["DOCUMENT_ROOT"]."/create-dir/set_catalogs.txt";
-
+    }
 
 }
 
-}
-
+(new AddCatalogs)->openFile();
 
 
 
