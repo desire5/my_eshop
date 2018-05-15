@@ -8,11 +8,6 @@ use \Bitrix\Main\IO\File;
 class AddCatalogs
 {
 
-    private $filePath;
-
-
-
-
     public function __construct()
     {
         echo 'status ok "create-dir/"<br>';
@@ -56,51 +51,61 @@ class AddCatalogs
 
     public function addLeftMenu()
     {
-        $pathMenu = $this->getRoot();
+        //$pathMenu = $this->getRoot();
 
 
-        if( File::isFileExists($pathMenu))
-        {
-            echo "file okkk";
+//        if(File::isFileExists($pathMenu))
+//        {
+          //  echo "file okkk";
             //include file with name of dir
-            include ($pathMenu);
+          //  include ($pathMenu);
 
-            $aMenuLinks = array();
-            if(is_array($aMenuLinks))
-            {
+            //$aMenuLinks = array();
+           // if(is_array($aMenuLinks))
+            //{
                 // data of names
                 $nameOfDir = self::openFile();
+                // building string
+                $a = "";
+                $a .= "<?
+                        $aMenuLinks = Array('";
+
+
                 foreach($nameOfDir as $dir)
                 {
-                    $aMenuLinks[] = array(
-                        "$dir",
+                    $a .= ' array(
+                        "'.$dir.'",
                         "/create/index.php",
                         array(),
                         array(),
                         ""
-                    );
+                    ); ';
                 }
+
+                $a .=");
+                            ?> ";
+
                 echo "<pre>";
-                print_r($aMenuLinks);
+                print_r($a);
                 echo "</pre>";
 
                 File::putFileContents(
-                    $_SERVER["DOCUMENT_ROOT"] . "/create-dir/.left.menu.php", $aMenuLinks,1);
+                    $_SERVER["DOCUMENT_ROOT"] . "/create-dir/.left.menu.php", $a);
 
-            }
+            //}
 
 
-        }
-        else
-        {
-            $aMenuLinks = '<?
-                        $aMenuLinks = Array(
-                        
-                        );
-                        ?>';
-            File::putFileContents(
-                $_SERVER["DOCUMENT_ROOT"] . "/create-dir/.left.menu.php", $aMenuLinks);
-        }
+        //}
+//        else
+//        {
+//            $aMenuLinks = '<?
+//                        $aMenuLinks = Array(
+//
+//                        );
+/*                        ?>';*/
+//            File::putFileContents(
+//                $_SERVER["DOCUMENT_ROOT"] . "/create-dir/.left.menu.php", $aMenuLinks);
+//        }
 
 
 
@@ -126,21 +131,21 @@ class AddCatalogs
             
             <?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>';
 
-            $content2 = '<? $sSectionName = "atya";
-            $arDirProperties = Array();
-            ?>';
+            $content2 = '<? $sSectionName = "'.$el.'";
+                                    $arDirProperties = Array();
+                                    ?>';
 
 //            $content3 = '<? $sSectionName = "zimno";
 //            $arDirProperties = Array();
 /*            ?>';*/
 
                 File::putFileContents(
-                    $_SERVER["DOCUMENT_ROOT"] . "/create-dir/".$el."/index.php", $content);
+                    $_SERVER["DOCUMENT_ROOT"] . '/create-dir/"'.$el.'"/index.php', $content);
                 File::putFileContents(
-                    $_SERVER["DOCUMENT_ROOT"] . "/create-dir/$el/.section.php", $content2);
+                    $_SERVER["DOCUMENT_ROOT"] . '/create-dir/"'.$el.'"/.section.php', $content2);
 
-            File::putFileContents(
-                $_SERVER["DOCUMENT_ROOT"] . "/create-dir/zimno/index.php", $content);
+          //  File::putFileContents(
+           //     $_SERVER["DOCUMENT_ROOT"] . "/create-dir/zimno/index.php", $content);
 //            File::putFileContents(
 //                $_SERVER["DOCUMENT_ROOT"] . "/create-dir/zimno/.section.php", $content3);
 
@@ -155,6 +160,7 @@ class AddCatalogs
 
     public function doing()
     {
+
 
     }
 
